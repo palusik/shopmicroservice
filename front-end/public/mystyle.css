@@ -1,0 +1,75 @@
+
+BODY {MARGIN: 10px; FONT: 12px verdana, arial, helvetica, sans-serif; COLOR: #2495AC; BACKGROUND-COLOR: white}
+
+INPUT {FONT: 12px verdana, arial, helvetica, sans-serif; background-color:#2495ac; border-color: #2495ac; color: white;}
+
+BUTTON {FONT: 12px verdana, arial, helvetica, sans-serif;  background-color:#2495ac; border-color: #FFFFFF; border: 1px solid; color: white; cursor: pointer;}
+
+TABLE {FONT: 14px verdana, arial, helvetica, sans-serif}
+
+SELECT {FONT: 12px verdana, arial, helvetica, sans-serif; background-color:#2495ac; border-color: #2495ac; color: white;}
+
+
+
+div.container {
+    width: 100%;
+}
+
+header, footer {
+    padding: 1em;
+    color: white;
+    background-color: #2495ac;
+    clear: left;
+    text-align: center;
+}
+
+nav {
+    float: top;
+    margin: 0;
+    padding: 1em;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul a {
+    text-decoration: none;
+}
+
+article {
+    padding: 1em;
+    overflow: hidden;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #80e9fd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #e3f8fc;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+li {
+    float: left;
+    border-right:1px solid #FFFFFF;
+}
+
+li:last-child {
+    border-right: none;
+}
