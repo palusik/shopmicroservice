@@ -1,0 +1,6 @@
+---
+applications:
+ - name: cart
+   random-route: false
+   host: shopmicro
+   memory: 864M

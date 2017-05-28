@@ -84,7 +84,7 @@ var server = http.createServer(function (request, response) {
                             }
                             theorderid = result.insertId;
 
-                            console.log("Created Order ID " + theorderid)
+                            console.log("Created Order ID " + theorderid);
                             // create order details
                             for (i = 0; i < cartdata.length; i++) {
                                 query2 = "INSERT INTO orderdetails (productID, orderID, quantity)" +
@@ -110,7 +110,7 @@ var server = http.createServer(function (request, response) {
 
                     var order = {
                         id: theorderid
-                    }
+                    };
                     response.end("Order has been added and has the following ID: " + JSON.stringify(order));
 
                 });
@@ -142,7 +142,7 @@ var server = http.createServer(function (request, response) {
                         function (err, rows) {
                             if (err) throw err;
 
-                            console.log("Updating Order ID " + orderId)
+                            console.log("Updating Order ID " + orderId);
                             response.end(orderId + " updated");
                             console.log("My Order Update completed");
                         }
@@ -189,7 +189,7 @@ var server = http.createServer(function (request, response) {
                     function (err, rows) {
                         if (err) throw err;
 
-                        console.log("Deletingd Order ID " + orderId)
+                        console.log("Deletingd Order ID " + orderId);
 
                         query2 = "DELETE FROM orders where orderID="+orderId;
                         console.log(query2);

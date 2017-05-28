@@ -73,7 +73,7 @@ var server = http.createServer(function (request, response) {
                                         theproductid = result.insertId;
                                         var product = {
                                             id: theproductid
-                                        }
+                                        };
                                         response.end("Product has been added and has the following ID: " + JSON.stringify(product));
 
                                     }
@@ -131,7 +131,7 @@ var server = http.createServer(function (request, response) {
                         }
                         else {
 
-                            console.log("Deleting product ID " + productId)
+                            console.log("Deleting product ID " + productId);
 
                             query2 = "DELETE FROM products where productID=" + productId;
                             console.log(query2);

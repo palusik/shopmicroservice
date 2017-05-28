@@ -7,7 +7,7 @@
         endpoints = require("../endpoints"),
         helpers = require("../../helpers"),
         app = express(),
-        cookie_name = "logged_in"
+        cookie_name = "logged_in";
 
 
     app.get("/customers/:id", function(req, res, next) {
@@ -91,23 +91,6 @@
         console.log("Deleting Customer " + req.params.id);
         var options = {
             uri: endpoints.customersUrl + "/" + req.params.id,
-            method: 'DELETE'
-        };
-        request(options, function(error, response, body) {
-            if (error) {
-                return next(error);
-            }
-            helpers.respondSuccessBody(res, JSON.stringify(body));
-        }.bind({
-            res: res
-        }));
-    });
-
-    // Delete Address - TO BE USED FOR TESTING ONLY (for now)
-    app.delete("/addresses/:id", function(req, res, next) {
-        console.log("Deleting Address " + req.params.id);
-        var options = {
-            uri: endpoints.addressUrl + "/" + req.params.id,
             method: 'DELETE'
         };
         request(options, function(error, response, body) {
@@ -248,6 +231,58 @@
         });
 
     });
+
+    app.get("/users", function (req, res, next) {
+        console.log("Request received with body: " + JSON.stringify(req.body));
+        var logged_in = req.cookies.logged_in;
+        if (!logged_in) {
+            throw new Error("User not logged in.");
+            return
+        }
+
+        console.log(req.url.toString());
+
+        async.waterfall([
+                function (callback) {
+                    request(endpoints.usersUrl + "/users", function (error, response, body) {
+                        if (error) {
+                            return callback(error);
+                        }
+                        console.log("Received response: " + JSON.stringify(body));
+                        if (response.statusCode == 404) {
+                            console.log("No users found");
+                            return callback(null, []);
+                        }
+                        //   callback(null, JSON.parse(body)._embedded.customerOrders);
+                        callback(null, JSON.parse(body));
+                    });
+                }
+            ],
+            function (err, result) {
+                if (err) {
+                    return next(err);
+                }
+                helpers.respondStatusBody(res, 201, JSON.stringify(result));
+            });
+    });
+
+    // Update Customer
+    app.post("/users/:id/:action", function(req, res, next) {
+        console.log("Updating Customer " + req.params.id);
+        var options = {
+            uri: endpoints.usersUrl + "/processuser?customerId=" + req.params.id + "&newRole=" + req.params.action,
+            method: 'POST'
+        };
+        request(options, function(error, response, body) {
+            if (error) {
+                return next(error);
+            }
+            helpers.respondSuccessBody(res, JSON.stringify(body));
+        }.bind({
+            res: res
+        }));
+    });
+
 
     module.exports = app;
 }());

@@ -1,5 +1,6 @@
 ---
 applications:
- - name: ShoppingApplication
-   random-route: true
-memory: 256M
+ - name: front-end
+   random-route: false
+   host: shopmicro
+   memory: 864M

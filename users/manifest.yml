@@ -1,0 +1,6 @@
+---
+applications:
+ - name: users
+   random-route: false
+   host: shopmicro
+   memory: 864M

@@ -16,7 +16,9 @@
         var OrderDetailheaders = [
             "Product", "Quantity", "Value"];
         var Usersheaders = [
-            "User Name", "Address", "Action"];
+            "User Name", "Address", "Role", "Email", "Action"];
+        var Queriesheaders = [
+            "Submitted", "Author", "Description", "Status", "Resolution", "Resolved", "Action"];
         $(document).ready(function () {
 
         });
@@ -35,8 +37,6 @@
 
         function getMyOrders() {
             hideAll();
-            $("#products").hide();
-            $("#cart").hide();
             $("#myorders").show();
             $.ajax({
                 dataType: "json",
@@ -47,10 +47,35 @@
             });
         }
 
+        function showUsers() {
+            hideAll();
+            $("#users").show();
+
+            $.ajax({
+                dataType: "json",
+                url: "/users",
+                success: function (data) {
+                    displayUsers(data, "users");
+                }
+            });
+        }
+
+        function showQueries() {
+            hideAll();
+            $("#queries").show();
+
+            $.ajax({
+                dataType: "json",
+                url: "/queries",
+                success: function (data) {
+                    displayQueries(data, "queries");
+                }
+            });
+        }
+
         function getProducts() {
             hideAll();
             $("#products").show();
-            $("#cart").hide();
             $.ajax({
                 dataType: "json",
                 url: "/getProducts",
@@ -91,9 +116,11 @@
             var x = getCookie("customerRole");
             if(x == "admin"){
                 $('#newProductButton').show();
+                $('#usersButton').show();
             }
             else {
                 $('#newProductButton').hide();
+                $('#usersButton').hide();
             }
 
             var customerId = getCookie("customerId");
@@ -101,13 +128,21 @@
             if(customerId != undefined)
             {
                 $('#myOrdersButton').show();
-                $('#logoutButton').hide();
+                $('#logoutButton').show();
+                $('#queriesButton').show();
+                $('#helpButton').show();
+                $('#loginButton').hide();
 
             }
             else
             {
                 $('#myOrdersButton').hide();
                 $('#logoutButton').hide();
+                $('#loginButton').show();
+                $('#queriesButton').hide();
+                $('#helpButton').hide();
+
+
             }
 
         }
@@ -120,6 +155,8 @@
             $("#newProduct").hide();
             $("#myorders").hide();
             $("#myorderdetails").hide();
+            $("#users").hide();
+            $("#queries").hide();
             $("#products").hide();
             $("#cart").hide();
             $('#logonmessage').html("");
@@ -172,11 +209,11 @@
 
             if(x == undefined){
                 $.notify("This function is available for valid users. Please log in.", "error");
-                return;
+
             }
             else if(cartdata.length == 0){
                 $.notify("Please add items to cart.", "error");
-                return;
+
             }
             else{
                 var customerId = getCustomerId();
@@ -191,18 +228,6 @@
                     },
                 });
             }
-
-
-
-
-          //  $.post(
-          //          "/checkout",
-          //          {
-          //          },
-          //          function (data) {
-          //              $('#cartmessage').html(data);
-          //          }
-          //  );
 
         }
 
@@ -232,6 +257,61 @@
                     $.notify("The selected order has been deleted from cart", "success");
                     //refresh carts
                     getMyOrders();
+                }
+            });
+        }
+
+        function submitQuery() {
+
+            var question = prompt("Please enter question:", "Enter any text");
+            if (question == null || question == "" || question == "Enter any text") {
+                $.notify("The question was not submitted", "error");
+            } else {
+                var customerId = getCustomerId();
+                $.ajax({
+                    type: "POST",
+                    url: "/addquery/" + customerId + "/" + question,
+                    contentType: "application/json",
+                    success: function () {
+                        $.notify("Your question has been submitted and will be answered shortly.\n You can review status under Customer queries button.", "success");
+                        //refresh users
+                    }
+                });
+            }
+        }
+
+        function updateQuery(count) {
+
+            var answer = prompt("Please enter resolution:", "Enter any text");
+            if (answer == null || answer == "" || answer == "Enter any text") {
+                $.notify("No answer was submitted", "error");
+            } else {
+
+                var customerId = getCustomerId();
+                $.ajax({
+                    type: "POST",
+                    url: "/updatequery/" + customerId + "/" + count + "/" + answer,
+                    contentType: "application/json",
+                    success: function () {
+                        $.notify("Issue has been resolved.", "success");
+                        //refresh users
+                    }
+                });
+            }
+        }
+
+
+        function updateUser(count, action) {
+            if (!confirm("Do you really wish to set the " + action + " role to this user?")) return;
+
+            $.ajax({
+                type: "POST",
+                url: "/users/" + count + "/" + action,
+                contentType: "application/json",
+                success: function () {
+                    $.notify("The selected user has been updated in the system", "success");
+                    //refresh users
+                    showUsers();
                 }
             });
         }
@@ -306,9 +386,9 @@
                 success: function () {
 
                     // cleanup cookies and expiry them
-                    document.cookie = 'customerRole=' + '; path=/'
-                    document.cookie = 'customerName=' + '; path=/'
-                    document.cookie = 'customerId=' + '; path=/'
+                    document.cookie = 'customerRole=' + '; path=/';
+                    document.cookie = 'customerName=' + '; path=/';
+                    document.cookie = 'customerId=' + '; path=/';
                     document.cookie = 'logged_in=; expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/';
                     document.cookie = 'customerId=; expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/';
                     document.cookie = 'customerName=; expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/';
@@ -316,6 +396,9 @@
                     <!-- "New Product Button Made Visible"  -->
                     $("#newProductButton").hide();
                     $("#myOrdersButton").hide();
+                    $("#usersButton").hide();
+                    $("#queriesButton").hide();
+                    $("#helpButton").hide();
                     $("#logoutButton").hide();
                     $("#loginButton").show();
 
@@ -345,7 +428,7 @@
                 out += '<td style="text-align: center"> <img src="';
                 out += "images/" + products[i].image + '" style="height:100px;">';
                 out += '<td  style="text-align: center">' + '<input style="text-align: end" type="number" pattern="\d+" value="1" name="';
-                out += 'quantity' + i + '" id="quant' + i
+                out += 'quantity' + i + '" id="quant' + i;
                 out += '">' + '</td>';
 
                 out += '<td style="text-align: center"> <button onclick="addToCart(' + products[i].productID;
@@ -440,6 +523,90 @@
             document.getElementById(name).innerHTML = out;
         }
 
+        function displayUsers(users, name) {
+            var customerRole = getCookie("customerRole");
+            var customerId   = getCookie("customerId");
+
+            var out = "<h1> Users</h1><table border=1 width=100%>";
+            var i;
+            out += '<tr>';
+            for (i = 0; i < Usersheaders.length; i++) {
+                out += '<th style="text-align: center">' + Usersheaders[i] + '</th>';
+            }
+            out += "</tr>";
+            for (i = 0; i < users.length; i++) {
+                out += "<tr>";
+                out += '<td style="text-align: center">' + users[i].name + '</td>';
+                out += '<td style="text-align: center">' + users[i].address + '</td>';
+                out += '<td style="text-align: center">' + users[i].role + '</td>';
+                out += '<td style="text-align: center">' + users[i].email + '</td>';
+
+                out += '<td style="text-align: center">';
+                if (customerRole == 'admin' && users[i].customerID != customerId) {
+                    if (users[i].role != 'admin') {
+                        if (users[i].role == null) {
+                            out += '<button onclick="updateUser(' + users[i].customerID;
+                            out += ", '" + 'operator' + "')" + '"><img src="/open-iconic/svg/check.svg" alt="Upgrade Role">  Upgrade Role</button>';
+                        }
+                        else {
+                            out += '<button onclick="updateUser(' + users[i].customerID;
+                            out += ", '" + 'admin' + "')" + '"><img src="/open-iconic/svg/check.svg" alt="Upgrade Role">  Upgrade Role</button>';
+                        }
+
+                    }
+                    if (users[i].role != null)
+                    {
+                        if (users[i].role == 'admin')
+                        {
+                            out += '<button onclick="updateUser(' + users[i].customerID;
+                            out += ", '" + 'operator' + "')" + '"><img src="/open-iconic/svg/x.svg" alt="Downgrade Role">  Downgrade Role</button>';
+
+                        }
+                        else
+                        {
+                            out += '<button onclick="updateUser(' + users[i].customerID;
+                            out += ", '" + 'nothing' + "')" + '"><img src="/open-iconic/svg/x.svg" alt="Downgrade Role">  Downgrade Role</button>';
+
+                        }
+                    }
+                }
+                out +='</td>';
+                out += "</tr>";
+            }
+            out += "</table>";
+            document.getElementById(name).innerHTML = out;
+        }
+
+        function displayQueries(queries, name) {
+            var customerRole = getCookie("customerRole");
+
+            var out = "<h1> Helpdesk queries</h1><table border=1 width=100%>";
+            var i;
+            out += '<tr>';
+            for (i = 0; i < Queriesheaders.length; i++) {
+                out += '<th style="text-align: center">' + Queriesheaders[i] + '</th>';
+            }
+            out += "</tr>";
+            for (i = 0; i < queries.length; i++) {
+                out += "<tr>";
+                out += '<td style="text-align: center">' + queries[i].issuedate + '</td>';
+                out += '<td style="text-align: center">' + queries[i].name + '</td>';
+                out += '<td style="text-align: center">' + queries[i].issuecomment + '</td>';
+                out += '<td style="text-align: center">' + queries[i].issuestatus + '</td>';
+                out += '<td style="text-align: center">' + queries[i].resolution + '</td>';
+                out += '<td style="text-align: center">' + queries[i].resolvedate + '</td>';
+
+                out += '<td style="text-align: center">';
+                if (customerRole == 'admin' || customerRole == 'operator') {
+                    out += '<button onclick="updateQuery(' + queries[i].customerissueID;
+                    out += ")" + '"><img src="/open-iconic/svg/check.svg" alt="Update Query">  Save Resolution</button>';
+                }
+                out +='</td>';
+                out += "</tr>";
+            }
+            out += "</table>";
+            document.getElementById(name).innerHTML = out;
+        }
 
 
         //displayProducts(productsData,"products");
@@ -478,15 +645,19 @@
                     dataType:"json",
                     success: function (data) {
                        // console.log(data);
-                        document.cookie = 'customerId=' + data.id + '; path=/'
-                        document.cookie = 'customerRole=' + data.role + '; path=/'
-                        document.cookie = 'customerName=' + data.name + '; path=/'
+                        document.cookie = 'customerId=' + data.id + '; path=/';
+                        document.cookie = 'customerRole=' + data.role + '; path=/';
+                        document.cookie = 'customerName=' + data.name + '; path=/';
 
                         if (data.role == 'admin') {
-                            $('#logonmessage').html("Welcome to our shopping application, " + data.name+ ". Your role is administrative, you can add new products, process orders, answer client queries.");
+                            $('#logonmessage').html("Welcome to our shopping application, " + data.name+ ". Your role is administrative, you can add new products, process orders, maintain users, answer client queries.");
                             $("#newProductButton").show();
                         }
-                        else {
+                        else if (data.role == 'operator') {
+                            $('#logonmessage').html("Welcome to our shopping application, " + data.name + ". Your role is operator, you can answer client queries.");
+                        }
+                        else
+                            {
                             $('#logonmessage').html("Welcome to our shopping application, " + data.name+ ".");
                         }
 
@@ -590,6 +761,9 @@
             $("#newProduct").hide();
             $("#myorders").hide();
             $("#myorderdetails").hide();
+            $("#users").hide();
+            $("#queries").hide();
+
             enbDisButtons();
         });
     </script>
@@ -610,7 +784,13 @@
             <li>
                 <button id="myOrdersButton" style="width: 100%;" onclick="getMyOrders()"><img src="/open-iconic/svg/list.svg" alt="My Orders">  My Orders </button></li>
             <li>
+                <button id="queriesButton" style="width: 100%;" onclick="showQueries()"><img src="/open-iconic/svg/list.svg" alt="Customer Queries">  Customer Queries </button></li>
+            <li>
                 <button id="newProductButton" style="width: 100%;" onclick="showNewProduct()"><img src="/open-iconic/svg/plus.svg" alt="New product">  New Product </button></li>
+            <li>
+                <button id="usersButton" style="width: 100%;" onclick="showUsers()"><img src="/open-iconic/svg/list.svg" alt="User Maintenance">  User Maintenance </button></li>
+            <li>
+                <button id="helpButton" style="width: 100%;" onclick="submitQuery()">?</button></li>
             <li style="float:right">
                 <button id="logoutButton" style="width: 100%;" onclick="logout()"><img src="/open-iconic/svg/x.svg" alt="Logout">  Logout </button></li>
             <li style="float:right">
@@ -627,6 +807,8 @@
         <div id="products"></div>
         <div id="myorders"></div>
         <div id="myorderdetails"></div>
+        <div id="users"></div>
+        <div id="queries"></div>
         <div id="logonmessage"></div>
         <div id="login" style="margin-left: 200px;">
             <h1>Login</h1>
@@ -657,6 +839,9 @@
                 <br>
                 Password:<br>
                 <input type="text" name="password" value="">
+                <br>
+                Email:<br>
+                <input type="text" name="email" value="">
                 <br>
                 <br>
 

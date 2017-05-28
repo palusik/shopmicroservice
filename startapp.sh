@@ -5,7 +5,7 @@
 # for a users-service user which can access it.
 echo "Starting DB..."
 pwd  
-cd test-databases
+cd database
 
 docker run --name db -d \  
   -e MYSQL_ROOT_PASSWORD=root \
@@ -23,26 +23,21 @@ docker exec -i db mysql -uroot -proot shop < setup.sql
 
 cd ../cart
 npm install
-nohup node app.js &
 
 cd ../catalogue
 npm install
-nohup node app.js &
 
 cd ../users
 npm install
-nohup node app.js &
 
 cd ../orders
 npm install
-nohup node app.js &
 
 cd ../helpdesk
 npm install
-nohup node app.js &
 
 cd ../front-end
 npm install
-nohup npm start &
+
 
   

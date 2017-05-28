@@ -35,7 +35,7 @@
   /* Responds with the given body and status 200 OK  */
   helpers.respondSuccessBody = function(res, body) {
     helpers.respondStatusBody(res, 200, body);
-  }
+  };
 
   /* Public: responds with the given body and status
    *
@@ -47,19 +47,19 @@
     res.writeHeader(statusCode);
     res.write(body);
     res.end();
-  }
+  };
 
   helpers.respondStatusBodyJSON = function(res, statusCode, body) {
     res.writeHeader(statusCode);
     res.write(JSON.stringify(body));
     res.end();
-  }
+  };
 
   /* Responds with the given statusCode */
   helpers.respondStatus = function(res, statusCode) {
     res.writeHeader(statusCode);
     res.end();
-  }
+  };
 
   /* Public: performs an HTTP GET request to the given URL
    *
@@ -82,7 +82,7 @@
       if (error) return next(error);
       helpers.respondSuccessBody(res, body);
     }.bind({res: res}));
-  }
+  };
 
   /* TODO: Add documentation */
   helpers.getCustomerId = function(req, env) {
@@ -103,6 +103,6 @@
     }
 
     return req.session.customerId;
-  }
+  };
   module.exports = helpers;
 }());

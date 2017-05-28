@@ -15,5 +15,6 @@
     cardsUrl:      "http://localhost:8080/cards",
     loginUrl:      "http://localhost:3001/login",
     registerUrl:   "http://localhost:3001/register",
+    usersUrl:      "http://localhost:3001",
   };
 }());

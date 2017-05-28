@@ -13,7 +13,8 @@ var request      = require("request")
   , catalogue    = require("./api/catalogue")
   , orders       = require("./api/orders")
   , user         = require("./api/user")
-  , app          = express()
+  , helpdesk     = require("./api/helpdesk")
+  , app          = express();
 
 //app.use(express.logger());
 epimetheus.instrument(app);
@@ -44,8 +45,9 @@ app.use(cart);
 app.use(catalogue);
 app.use(orders);
 app.use(user);
+app.use(helpdesk);
 
-var server = app.listen(process.env.PORT || 8079, function () {
+var server = app.listen(process.env.PORT || 8080, function () {
   var port = server.address().port;
   console.log("App now running in %s mode on port %d", app.get("env"), port);
 });

@@ -1,0 +1,6 @@
+---
+applications:
+ - name: helpdesk
+   random-route: false
+   host: shopmicro
+   memory: 864M

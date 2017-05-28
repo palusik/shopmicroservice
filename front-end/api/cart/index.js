@@ -6,7 +6,7 @@
     , request   = require("request")
     , helpers   = require("../../helpers")
     , endpoints = require("../endpoints")
-    , app       = express()
+    , app       = express();
 
   // List items in cart for current logged in user.
  /* app.get("/cart", function (req, res, next) {
@@ -136,7 +136,7 @@
               + " body: " + JSON.stringify(options.body));
           request(options, function (error, response, body) {
             if (error) {
-              callback(error)
+              callback(error);
                 return;
             }
             callback(null, response.statusCode);

@@ -36,7 +36,7 @@ var server = http.createServer(function (request, response) {
                 request.on('end', function () {
                     var obj = JSON.parse(body);
                     console.log(JSON.stringify(obj, null, 2));
-                    var query = "SELECT * FROM Customer where name='"+obj.name+"'";
+                    var query = "SELECT * FROM Customer where name='"+obj.name+"' and password='"+obj.password+"'";
                     response.writeHead(200, {
                         'Access-Control-Allow-Origin': '*'
                     });
@@ -58,7 +58,7 @@ var server = http.createServer(function (request, response) {
                                     id: theuserid,
                                     name: theuser,
                                     role: therole
-                                }
+                                };
                                 response.end(JSON.stringify(obj));
 
                             }
@@ -105,11 +105,11 @@ var server = http.createServer(function (request, response) {
                                 response.end('{"error": "2"}');
                             }
                             else{
-                                query = "INSERT INTO Customer (name, password, address)"+
-                                        "VALUES(?, ?, ?)";
+                                query = "INSERT INTO Customer (name, password, address, email)"+
+                                        "VALUES(?, ?, ?, ?)";
                                 db.query(
                                     query,
-                                    [obj.name,obj.password,obj.address],
+                                    [obj.name,obj.password,obj.address,obj.email],
                                     function(err, result) {
                                         if (err) {
                                             // 2 response is an sql error
@@ -119,7 +119,7 @@ var server = http.createServer(function (request, response) {
                                         theuserid = result.insertId;
                                         var obj = {
                                             id: theuserid
-                                        }
+                                        };
                                         response.end(JSON.stringify(obj));
 
                                     }
@@ -130,9 +130,90 @@ var server = http.createServer(function (request, response) {
                     );
                 });
                 break;
+
+            case "/processuser"    :
+                var query = require('url').parse(request.url, true).query;
+
+                var customerId = query.customerId;
+                var newrole = query.newRole;
+
+                if (newrole == 'nothing')
+                    newrole = null;
+
+                var body = "";
+                request.on('data', function (data) {
+                    body += data;
+                });
+
+                request.on('end', function () {
+                    response.writeHead(200, {
+                        'Content-Type': 'text/html',
+                        'Access-Control-Allow-Origin': '*'
+                    });
+                    // console.log(JSON.stringify(customer, null, 2));
+
+                    var query = "UPDATE customer SET role = '" + newrole + "' where customerID=" +
+                        customerId;
+
+                    db.query(
+                        query,
+                        [],
+                        function (err, rows) {
+                            if (err) throw err;
+
+                            console.log("Updating Customer ID " + customerId);
+                            response.end(customerId + " updated");
+                            console.log("Role Update completed");
+                        }
+                    );
+
+                });
+
+
+                break;
+
+
+
+
         } //switch
     }
-   
+    else {
+        switch (path) {
+            // /cart/:custId/items
+            // case "/getUsers"    :
+            case "/users"    :
+
+                var body = "";
+                request.on('data', function (data) {
+                    body += data;
+                });
+
+                request.on('end', function () {
+                    response.writeHead(200, {
+                        'Content-Type': 'text/html',
+                        'Access-Control-Allow-Origin': '*'
+                    });
+
+                    var query = "SELECT * FROM customer";
+
+
+                    db.query(
+                        query,
+                        [],
+                        function (err, rows) {
+                            if (err) throw err;
+                            console.log(JSON.stringify(rows, null, 2));
+                            response.end(JSON.stringify(rows));
+                            console.log("My Customers sent");
+                        }
+                    );
+
+                });
+
+                break;
+        }
+    }
+
 
 });
 server.listen(3001);

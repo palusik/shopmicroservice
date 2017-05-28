@@ -1,0 +1,6 @@
+---
+applications:
+ - name: orders
+   random-route: false
+   host: shopmicro
+   memory: 864M

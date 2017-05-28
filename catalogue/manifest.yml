@@ -1,0 +1,6 @@
+---
+applications:
+ - name: catalogue
+   random-route: false
+   host: shopmicro
+   memory: 864M
