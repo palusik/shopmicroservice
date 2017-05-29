@@ -131,13 +131,12 @@ var server = http.createServer(function (request, response) {
         switch (path) {
             // /cart/:custId/items
             // case "/getMyOrders"    :
-            case "/queries"    :
+            case "/clientqueries"    :
 
+                var query = require('url').parse(request.url, true).query;
 
-                var inputparams = qs.parse(request.url.toString());
-
-                var custId = inputparams.custId;
-                var custRole = inputparams.custRole;
+                var custId = query.custId;
+                var custRole = query.custRole;
                 console.log("Selected customerId " + custId + " for role " + custRole);
 
                 var body="";

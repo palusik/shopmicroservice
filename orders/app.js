@@ -226,10 +226,11 @@ var server = http.createServer(function (request, response) {
             case "/orders/search/customerId"    :
 
 
-                var inputparams = qs.parse(request.url.toString());
+                var query = require('url').parse(request.url, true).query;
 
-                var custId = inputparams.custId;
-                var custRole = inputparams.custRole;
+                var custId = query.custId;
+                var custRole = query.custRole;
+
                 console.log("Selected customerId " + custId + " for role " + custRole);
 
                 var body="";

@@ -12,7 +12,6 @@
 
     app.get("/queries", function (req, res, next) {
         console.log("Request received with body: " + JSON.stringify(req.body));
-
         var logged_in = req.cookies.logged_in;
         if (!logged_in) {
             throw new Error("User not logged in.");
@@ -20,15 +19,13 @@
         }
 
         var custId = helpers.getCustomerId(req, app.get("env"));
-
         var custId = req.session.customerId;
         var custRole = req.session.customerRole;
-        console.log(custId);
-        console.log(req.url.toString());
+
 
         async.waterfall([
                 function (callback) {
-                    request(endpoints.helpdeskUrl + "/queries?custId=" + custId + "&custRole="+custRole, function (error, response, body) {
+                    request(endpoints.helpdeskUrl + "/clientqueries?custId=" + custId + "&custRole="+custRole, function (error, response, body) {
                         if (error) {
                             return callback(error);
                         }
