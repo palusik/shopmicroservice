@@ -35,11 +35,9 @@ services:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_ALLOW_EMPTY_PASSWORD=true
       - MYSQL_DATABASE=shop
-  carts:
-    image: palinko/carts
-    hostname: carts
-    ports:
-      - "3002:3002"
+  cart:
+    image: palinko/cart
+    hostname: cart
     restart: always
     cap_drop:
       - all
@@ -53,8 +51,6 @@ services:
   orders:
     image: palinko/orders
     hostname: orders
-    ports:
-      - "3004:3004"
     restart: always
     cap_drop:
       - all
@@ -65,11 +61,9 @@ services:
       - /tmp:rw,noexec,nosuid
     environment:
       - JAVA_OPTS=-Xms64m -Xmx128m -XX:PermSize=32m -XX:MaxPermSize=64m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom
-  user:
-    image: palinko/user
-    hostname: user
-    ports:
-      - "3001:3001"
+  users:
+    image: palinko/users
+    hostname: users
     restart: always
     cap_drop:
       - all
