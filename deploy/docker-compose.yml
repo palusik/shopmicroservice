@@ -4,17 +4,31 @@ services:
   front-end:
     image: palinko/front-end
     hostname: front-end
-    ports:
-      - "8080:8080"
     restart: always
     cap_drop:
       - all
     read_only: true
+  edge-router:
+    image: palinko/edge-router
+    ports:
+      - '80:80'
+      - '8080:8080'
+    cap_drop:
+      - all
+    cap_add:
+      - NET_BIND_SERVICE
+      - CHOWN
+      - SETGID
+      - SETUID
+      - DAC_OVERRIDE
+    read_only: true
+    tmpfs:
+      - /var/run:rw,noexec,nosuid
+    hostname: edge-router
+    restart: always
   catalogue:
     image: palinko/catalogue
     hostname: catalogue
-    ports:
-      - "3002:3002"
     restart: always
     cap_drop:
       - all
@@ -44,10 +58,10 @@ services:
     cap_add:
       - NET_BIND_SERVICE
     read_only: true
-    tmpfs:
-      - /tmp:rw,noexec,nosuid
+    depends_on:
+      - db
     environment:
-      - JAVA_OPTS=-Xms64m -Xmx128m -XX:PermSize=32m -XX:MaxPermSize=64m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom
+      - DATABASE_HOST=db
   orders:
     image: palinko/orders
     hostname: orders
@@ -57,10 +71,10 @@ services:
     cap_add:
       - NET_BIND_SERVICE
     read_only: true
-    tmpfs:
-      - /tmp:rw,noexec,nosuid
+    depends_on:
+      - db
     environment:
-      - JAVA_OPTS=-Xms64m -Xmx128m -XX:PermSize=32m -XX:MaxPermSize=64m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom
+      - DATABASE_HOST=db
   users:
     image: palinko/users
     hostname: users
@@ -70,6 +84,21 @@ services:
     cap_add:
       - NET_BIND_SERVICE
     read_only: true
+    depends_on:
+      - db
     environment:
-      - MONGO_HOST=user-db:27017
-    command: "-d 60 -r 200 -c 2 -h front-end"
+      - DATABASE_HOST=db
+  helpdesk:
+    image: palinko/helpdesk
+    hostname: helpdesk
+    restart: always
+    cap_drop:
+      - all
+    cap_add:
+      - NET_BIND_SERVICE
+    read_only: true
+    depends_on:
+      - db
+    environment:
+      - DATABASE_HOST=db
+    command: "-d 60 -r 200 -c 2 -h edge-router"
