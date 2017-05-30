@@ -4,6 +4,7 @@ services:
   front-end:
     image: palinko/front-end
     hostname: front-end
+    container_name: front-end
     restart: always
     cap_drop:
       - all
