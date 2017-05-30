@@ -8,6 +8,12 @@ services:
     cap_drop:
       - all
     read_only: true
+    links:
+      - catalogue
+      - cart
+      - users
+      - orders
+      - helpdesk 
   edge-router:
     image: palinko/edge-router
     ports:
@@ -42,6 +48,7 @@ services:
   db:
     image: palinko/db
     hostname: db
+    container_name: shopdb
     ports:
       - "3306:3306"
     restart: always
@@ -101,4 +108,4 @@ services:
       - db
     environment:
       - DATABASE_HOST=db
-    command: "-d 60 -r 200 -c 2 -h edge-router"
+

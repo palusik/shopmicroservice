@@ -3,18 +3,36 @@ version: '2'
 services:
   front-end:
     image: palinko/front-end
-    hostname: localhost
-    ports:
-      - "8079:8079"
     restart: always
     cap_drop:
       - all
     read_only: true
+    links:
+      - catalogue
+      - cart
+      - users
+      - orders
+      - helpdesk 
+  edge-router:
+    image: palinko/edge-router
+    ports:
+      - '80:80'
+      - '8080:8080'
+    cap_drop:
+      - all
+    cap_add:
+      - NET_BIND_SERVICE
+      - CHOWN
+      - SETGID
+      - SETUID
+      - DAC_OVERRIDE
+    read_only: true
+    tmpfs:
+      - /var/run:rw,noexec,nosuid
+    hostname: edge-router
+    restart: always
   catalogue:
     image: palinko/catalogue
-    hostname: localhost
-    ports:
-      - "3002:3002"
     restart: always
     cap_drop:
       - all
@@ -24,10 +42,9 @@ services:
     depends_on:
       - db
     environment:
-      - DATABASE_HOST=localhost
+      - DATABASE_HOST=db
   db:
     image: palinko/db
-    hostname: localhost
     ports:
       - "3306:3306"
     restart: always
@@ -35,44 +52,20 @@ services:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_ALLOW_EMPTY_PASSWORD=true
       - MYSQL_DATABASE=shop
-  carts:
-    image: palinko/carts
-    hostname: localhost
-    ports:
-      - "3002:3002"
+  cart:
+    image: palinko/cart
     restart: always
     cap_drop:
       - all
     cap_add:
       - NET_BIND_SERVICE
     read_only: true
-    tmpfs:
-      - /tmp:rw,noexec,nosuid
+    depends_on:
+      - db
     environment:
-      - JAVA_OPTS=-Xms64m -Xmx128m -XX:PermSize=32m -XX:MaxPermSize=64m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom
+      - DATABASE_HOST=db
   orders:
     image: palinko/orders
-    hostname: localhost
-    ports:
-      - "3004:3004"
-    restart: always
-    cap_drop:
-      - all
-    cap_add:
-      - NET_BIND_SERVICE
-    read_only: true
-    tmpfs:
-      - /tmp:rw,noexec,nosuid
-    depends_on:
-      - db
-    environment:
-      - DATABASE_HOST=localhost
-      - JAVA_OPTS=-Xms64m -Xmx128m -XX:PermSize=32m -XX:MaxPermSize=64m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom
-  user:
-    image: palinko/user
-    hostname: localhost
-    ports:
-      - "3001:3001"
     restart: always
     cap_drop:
       - all
@@ -82,5 +75,29 @@ services:
     depends_on:
       - db
     environment:
-      - DATABASE_HOST=localhost
-    command: "-d 60 -r 200 -c 2 -h front-end"
+      - DATABASE_HOST=db
+  users:
+    image: palinko/users
+    restart: always
+    cap_drop:
+      - all
+    cap_add:
+      - NET_BIND_SERVICE
+    read_only: true
+    depends_on:
+      - db
+    environment:
+      - DATABASE_HOST=db
+  helpdesk:
+    image: palinko/helpdesk
+    restart: always
+    cap_drop:
+      - all
+    cap_add:
+      - NET_BIND_SERVICE
+    read_only: true
+    depends_on:
+      - db
+    environment:
+      - DATABASE_HOST=db
+

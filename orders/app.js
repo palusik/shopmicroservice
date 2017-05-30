@@ -11,9 +11,9 @@ var headers = [
 
 
 var db = mysql.createConnection({
-    host:     'localhost',
+    host:     'shopdb',
     user:     'root',
-    password: 'root',
+    password: '',
     database: 'shop'
 });
 var cart = [];
