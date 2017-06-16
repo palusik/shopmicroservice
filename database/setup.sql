@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `shop` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `shop`;
 -- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: shop
@@ -30,7 +32,7 @@ CREATE TABLE `customer` (
   `role` varchar(15) DEFAULT NULL,
   `email` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`customerID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +41,7 @@ CREATE TABLE `customer` (
 
 LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
-INSERT INTO `customer` VALUES (1,'joe','joe','cork','operator','joe@cork.ie'),(2,'mary','mary','dublin',NULL,'marv@dublin.ie'),(3,'joey','joey','london','operator','joey@london.co.uk'),(4,'fred','fred','dublin','null','fred@dublin.ie'),(5,'admin','admin','cork','admin','admin@cork.ie'),(6,'test','test','cork',NULL,'test@cork.ie');
+INSERT INTO `customer` VALUES (1,'joe','joe','cork','operator','joe@cork.ie'),(2,'mary','mary','dublin',NULL,'marv@dublin.ie'),(3,'joey','joey','london','operator','joey@london.co.uk'),(4,'fred','fred','dublin','null','fred@dublin.ie'),(5,'admin','admin','cork','admin','admin@cork.ie'),(6,'test','test','cork',NULL,'test@cork.ie'),(7,'palo','palo','palo',NULL,'palo@cork.ie');
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -60,7 +62,7 @@ CREATE TABLE `customerissue` (
   `customerID` int(10) DEFAULT NULL,
   `resolverID` int(10) DEFAULT NULL,
   PRIMARY KEY (`customerissueID`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -69,7 +71,7 @@ CREATE TABLE `customerissue` (
 
 LOCK TABLES `customerissue` WRITE;
 /*!40000 ALTER TABLE `customerissue` DISABLE KEYS */;
-INSERT INTO `customerissue` VALUES (1,'blablabla','COMPLETE','2017-05-28 00:07:57','2017-05-28 00:25:11','invalid query',1,1),(2,'my product is not in catalogue.','COMPLETE','2017-05-28 00:09:48','2017-05-28 01:04:04','test',1,5),(3,'test','NEW','2017-05-28 00:55:16',NULL,NULL,4,NULL),(4,'test 2','NEW','2017-05-28 01:00:24',NULL,NULL,4,NULL),(5,'test 3','NEW','2017-05-28 01:01:26',NULL,NULL,4,NULL);
+INSERT INTO `customerissue` VALUES (1,'blablabla','COMPLETE','2017-05-28 00:07:57','2017-05-28 00:25:11','invalid query',1,1),(2,'my product is not in catalogue.','COMPLETE','2017-05-28 00:09:48','2017-05-28 01:04:04','test',1,5),(3,'test','NEW','2017-05-28 00:55:16',NULL,NULL,4,NULL),(4,'test 2','NEW','2017-05-28 01:00:24',NULL,NULL,4,NULL),(5,'test 3','NEW','2017-05-28 01:01:26',NULL,NULL,4,NULL),(6,'i dont know when to plant','NEW','2017-06-16 22:37:23',NULL,NULL,4,NULL);
 /*!40000 ALTER TABLE `customerissue` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -86,7 +88,7 @@ CREATE TABLE `orderdetails` (
   `productID` int(10) unsigned NOT NULL,
   `quantity` int(10) unsigned NOT NULL,
   PRIMARY KEY (`orderdetailsID`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -95,7 +97,7 @@ CREATE TABLE `orderdetails` (
 
 LOCK TABLES `orderdetails` WRITE;
 /*!40000 ALTER TABLE `orderdetails` DISABLE KEYS */;
-INSERT INTO `orderdetails` VALUES (1,6,1,1),(2,6,2,1),(3,7,1,2),(4,7,2,1),(6,9,6,2),(7,10,6,1),(8,10,5,1),(9,10,4,1),(10,11,1,2);
+INSERT INTO `orderdetails` VALUES (1,6,1,1),(2,6,2,1),(3,7,1,2),(4,7,2,1),(6,9,6,2),(7,10,6,1),(8,10,5,1),(9,10,4,1),(10,11,1,2),(11,12,1,3),(12,12,5,1),(13,13,1,4),(14,14,1,1001),(15,14,2,100),(16,15,1,8);
 /*!40000 ALTER TABLE `orderdetails` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -113,7 +115,7 @@ CREATE TABLE `orders` (
   `orderstatus` varchar(30) DEFAULT NULL,
   `price` decimal(7,2) DEFAULT NULL,
   PRIMARY KEY (`orderID`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -122,7 +124,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (4,1,'2017-05-22 01:19:42','PROCESSED',0.97),(5,1,'2017-05-22 01:27:19','NEW',0.97),(6,1,'2017-05-22 01:31:31','NEW',0.97),(7,1,'2017-05-22 09:31:40','NEW',1.45),(9,5,'2017-05-22 16:05:42','NEW',24.00),(10,1,'2017-05-22 17:55:53','PROCESSED',12.58),(11,5,'2017-05-22 20:50:58','NEW',0.96);
+INSERT INTO `orders` VALUES (4,1,'2017-05-22 01:19:42','PROCESSED',0.97),(5,1,'2017-05-22 01:27:19','NEW',0.97),(6,1,'2017-05-22 01:31:31','NEW',0.97),(7,1,'2017-05-22 09:31:40','NEW',1.45),(9,5,'2017-05-22 16:05:42','NEW',24.00),(10,1,'2017-05-22 17:55:53','PROCESSED',12.58),(11,5,'2017-05-22 20:50:58','NEW',0.96),(12,5,'2017-05-29 00:03:54','NEW',1.69),(13,5,'2017-06-16 22:27:48','PROCESSED',1.92),(14,4,'2017-06-16 22:35:47','NEW',529.48),(15,7,'2017-06-16 22:39:55','NEW',3.84);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -149,7 +151,7 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (1,'Car 1',10000,0.48,'car1.jpeg'),(2,'Car 2',8000,0.49,'car2.jpeg'),(4,'Car 6',80,0.33,'car3.jpeg'),(5,'Car 5',90,0.25,'car5.jpeg'),(6,'sdfsa',12,12.00,'car5.jpeg'),(22,'tes',12,22.00,'car1.jpeg');
+INSERT INTO `products` VALUES (1,'Product 1',10000,0.48,'product1.jpg'),(2,'Product 2',8000,0.49,'product2.jpg'),(4,'Product 4',80,0.33,'product3.jpg'),(5,'Product 5',90,0.25,'product5.jpg'),(6,'Product 6',12,12.00,'product4.jpg'),(22,'tes',12,22.00,'product7.jpg');
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -162,4 +164,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-05-28  2:06:43
+-- Dump completed on 2017-06-16 23:58:13

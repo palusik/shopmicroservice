@@ -1,20 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link href="mystyle.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="/mystyle.css" />
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="notify.js"></script>
-
-    <title>
-        Shopping application
-    </title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script type="text/javascript" src="/notify.js"></script>
 
     <script type="text/javascript" language="javascript">
         var headers = [
-            "Product Name", "Price", "Picture", "Quantity", "Add to Cart"];
+            "Product", "PPU", "Image", "Quantity", "Add to Cart"];
         var Cartheaders = [
-            "Product Name", "Price", "Picture", "Quantity", "Total", "Remove from Cart"];
+            "Product", "PPU", "Image", "Quantity", "Total", "Remove from Cart"];
         var MyOrdersheaders = [
             "Order No", "Order date", "Value", "Status", "Details", "Action"];
         var OrderDetailheaders = [
@@ -823,7 +819,7 @@
                 <input type="text" name="name" value="">
                 <br>
                 Password:<br>
-                <input type="text" name="password" value="">
+                <input type="password" name="password" value="">
                 <br>
                 <br>
                 <button type="submit" form="logonForm" value="Submit"><img src="/open-iconic/svg/thumb-up.svg" alt="Ok">  Submit</button>
@@ -842,10 +838,10 @@
                 <input type="text" name="address" value="">
                 <br>
                 Password:<br>
-                <input type="text" name="password" value="">
+                <input type="password" name="password" value="">
                 <br>
                 Email:<br>
-                <input type="text" name="email" value="">
+                <input type="email" name="email" value="">
                 <br>
                 <br>
 
@@ -869,11 +865,14 @@
                 <br>
                 Image:<br>
                 <select name="image">
-                    <option value="car1.jpeg">Car1.jpeg</option>
-                    <option value="car2.jpeg">Car2.jpeg</option>
-                    <option value="car3.jpeg">Car3.jpeg</option>
-                    <option value="car4.jpeg">Car4.jpeg</option>
-                    <option value="car5.jpeg">Car5.jpeg</option>
+                    <option value="product1.jpg">Product1.jpg</option>
+                    <option value="product2.jpg">Product2.jpg</option>
+                    <option value="product3.jpg">Product3.jpg</option>
+                    <option value="product4.jpg">Product4.jpg</option>
+                    <option value="product5.jpg">Product5.jpg</option>
+                    <option value="product6.jpg">Product6.jpg</option>
+                    <option value="product7.jpg">Product7.jpg</option>
+                    <option value="product8.jpg">Product8.jpg</option>
                 </select>
                 <br>
                 <br>
