@@ -17,7 +17,7 @@ var request      = require("request")
   , app          = express();
 
 //app.use(express.logger());
-epimetheus.instrument(app);
+//epimetheus.instrument(app);
 app.use(morgan('combined'));
 app.use(morgan("dev", {}));
 app.use(express.static("public"));
