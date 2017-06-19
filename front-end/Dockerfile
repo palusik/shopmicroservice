@@ -12,4 +12,6 @@ RUN npm install
 COPY . /usr/src/app
 
 EXPOSE 8079
-CMD [ "npm", "start" ]
+# Start the app
+
+CMD ["npm", "start"]

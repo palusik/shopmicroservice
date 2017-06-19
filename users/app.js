@@ -36,7 +36,7 @@ var server = http.createServer(function (request, response) {
                 request.on('end', function () {
                     var obj = JSON.parse(body);
                     console.log(JSON.stringify(obj, null, 2));
-                    var query = "SELECT * FROM Customer where name='"+obj.name+"' and password='"+obj.password+"'";
+                    var query = "SELECT * FROM customer where name='"+obj.name+"' and password='"+obj.password+"'";
                     response.writeHead(200, {
                         'Access-Control-Allow-Origin': '*'
                     });
@@ -87,7 +87,7 @@ var server = http.createServer(function (request, response) {
                 request.on('end', function () {
                     var obj = JSON.parse(body);
                     console.log(JSON.stringify(obj, null, 2));
-                    var query = "SELECT * FROM Customer where name='"+obj.name+"'";
+                    var query = "SELECT * FROM customer where name='"+obj.name+"'";
                     response.writeHead(200, {
                         'Access-Control-Allow-Origin': '*'
                     });
@@ -105,7 +105,7 @@ var server = http.createServer(function (request, response) {
                                 response.end('{"error": "2"}');
                             }
                             else{
-                                query = "INSERT INTO Customer (name, password, address, email)"+
+                                query = "INSERT INTO customer (name, password, address, email)"+
                                         "VALUES(?, ?, ?, ?)";
                                 db.query(
                                     query,
